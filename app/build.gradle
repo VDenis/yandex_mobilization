@@ -30,4 +30,6 @@ dependencies {
 
     apt 'net.simonvt.schematic:schematic-compiler:0.6.3' // Generate content provider
     compile 'net.simonvt.schematic:schematic:0.6.3' // Generate content provider
+
+    compile 'com.google.code.gson:gson:2.6.2' // use for convert a JSON string to an equivalent Java object
 }

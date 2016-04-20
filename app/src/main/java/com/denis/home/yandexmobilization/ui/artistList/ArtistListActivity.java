@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.denis.home.yandexmobilization.R;
 import com.denis.home.yandexmobilization.dummy.DummyContent;
+import com.denis.home.yandexmobilization.service.ArtistSyncServiceHelper;
 import com.denis.home.yandexmobilization.ui.artistDetail.ArtistDetailActivity;
 
 /**
@@ -62,4 +63,9 @@ public class ArtistListActivity extends AppCompatActivity {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane));
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ArtistSyncServiceHelper.startActionSync(this);
+    }
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Этот код мы используем для отладки: когда какой item выбирается системой -->
+    <plurals name="plurals_test">
+        <item quantity="zero">%1$d = zero</item>
+        <item quantity="one">%1$d = one</item>
+        <item quantity="two">%1$d = two</item>
+        <item quantity="few">%1$d = few</item>
+        <item quantity="many">%1$d = many</item>
+        <item quantity="other">%1$d = other</item>
+    </plurals>
+
+    <!-- А этот код мы используем для проверки того, как выглядит реальное склонение -->
+    <plurals name="plurals_tracks">
+        <item quantity="zero">no songs</item>
+        <item quantity="one">%1$d songs</item>
+        <item quantity="two">%1$d songs</item>
+        <item quantity="few">%1$d songs</item>
+        <item quantity="many">%1$d songs</item>
+        <item quantity="other">%1$d songs</item>
+    </plurals>
+
+    <plurals name="plurals_albums">
+        <item quantity="zero">no albums</item>
+        <item quantity="one">%1$d album</item>
+        <item quantity="two">%1$d albums</item>
+        <item quantity="few">%1$d albums</item>
+        <item quantity="many">%1$d albums</item>
+        <item quantity="other">%1$d albums</item>
+    </plurals>
+</resources>

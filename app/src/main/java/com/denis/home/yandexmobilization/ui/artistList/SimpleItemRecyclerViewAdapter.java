@@ -55,6 +55,8 @@ public class SimpleItemRecyclerViewAdapter
         final String artistImage = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.SMALL));
         final String artistName = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.NAME));
         final String artistGenres = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.GENRES));
+        final String artistTracksCount = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.TRACKS));
+        final String artistAlbumsCount = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.ALBUMS));
 
         Picasso.with(mArtistListActivity)
                 .load(artistImage)
@@ -62,8 +64,21 @@ public class SimpleItemRecyclerViewAdapter
                 .error(R.mipmap.ic_launcher)
                 .into(holder.mImageView);
 
-        holder.mIdView.setText(artistName);
-        holder.mContentView.setText(artistGenres);
+        // Set content description to the artist image
+        String imageDescription = String.format(mArtistListActivity.getResources().getString(R.string.a11n_artist_photo_name), artistName);
+        holder.mImageView.setContentDescription(imageDescription);
+
+        holder.mArtistNameView.setText(artistName);
+        holder.mArtistGenresView.setText(artistGenres);
+
+        int albumsCount = Integer.valueOf(artistAlbumsCount);
+        int tracksCount = Integer.valueOf(artistTracksCount);
+        //String quantityAlbumsCount = mArtistListActivity.getResources().getQuantityString(R.plurals.plurals_test, 1, 1);
+        String quantityAlbumsCount = mArtistListActivity.getResources().getQuantityString(R.plurals.plurals_albums, albumsCount, albumsCount);
+        //String quantityTracksCount = mArtistListActivity.getResources().getQuantityString(R.plurals.plurals_test, 20, 20);
+        String quantityTracksCount = mArtistListActivity.getResources().getQuantityString(R.plurals.plurals_tracks, tracksCount, tracksCount);
+        String result = String.format(mArtistListActivity.getResources().getString(R.string.artist_tracks_and_albums), quantityAlbumsCount, quantityTracksCount);
+        holder.mArtistTracksAndAlbumsView.setText(result);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,22 +126,24 @@ public class SimpleItemRecyclerViewAdapter
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+        public final TextView mArtistNameView;
+        public final TextView mArtistTracksAndAlbumsView;
+        public final TextView mArtistGenresView;
         public final ImageView mImageView;
         //public DummyContent.DummyItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mArtistNameView = (TextView) view.findViewById(R.id.artist_name);
+            mArtistGenresView = (TextView) view.findViewById(R.id.artist_genres);
+            mArtistTracksAndAlbumsView = (TextView) view.findViewById(R.id.artist_tracks_and_albums);
             mImageView = (ImageView) view.findViewById(R.id.image);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mArtistNameView + " " + mArtistGenresView.getText() + "'";
         }
     }
 }

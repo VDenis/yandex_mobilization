@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Yandex Mobilization</string>
     <string name="title_artist_detail">Artist Detail</string>
+
+    <!-- Format artist tracks and albums string: "11 albums, 33 songs" -->
+    <string name="artist_tracks_and_albums" translatable="false">%1$s, %2$s</string>
+
+    <!-- a11n -->
+    <string name="a11n_artist_photo">Artist photo</string>
+    <string name="a11n_artist_photo_name">The artist name is %1$s</string>
+
 </resources>

@@ -3,7 +3,7 @@ package com.denis.home.yandexmobilization.ui.artistList;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Bundle;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.denis.home.yandexmobilization.R;
 import com.denis.home.yandexmobilization.data.ArtistColumns;
+import com.denis.home.yandexmobilization.data.ArtistProvider;
 import com.denis.home.yandexmobilization.ui.artistDetail.ArtistDetailActivity;
 import com.denis.home.yandexmobilization.ui.artistDetail.ArtistDetailFragment;
 import com.squareup.picasso.Picasso;
@@ -51,9 +52,9 @@ public class SimpleItemRecyclerViewAdapter
         final int databaseId = mCursor.getInt(mCursor.getColumnIndex(ArtistColumns._ID));
 
 
-        String artistImage = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.SMALL));
-        String artistName = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.NAME));
-        String artistGenres = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.GENRES));
+        final String artistImage = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.SMALL));
+        final String artistName = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.NAME));
+        final String artistGenres = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.GENRES));
 
         Picasso.with(mArtistListActivity)
                 .load(artistImage)
@@ -67,18 +68,23 @@ public class SimpleItemRecyclerViewAdapter
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Uri artistIdUri = ArtistProvider.Artists.withId(databaseId);
                 if (mTwoPane) {
-                    Bundle arguments = new Bundle();
+/*                    Bundle arguments = new Bundle();
                     arguments.putString(ArtistDetailFragment.ARG_ITEM_ID, String.valueOf(databaseId)); // TODO: change String.valueOf()
                     ArtistDetailFragment fragment = new ArtistDetailFragment();
-                    fragment.setArguments(arguments);
+                    fragment.setArguments(arguments);*/
+
+                    ArtistDetailFragment fragment = ArtistDetailFragment.newInstance(artistIdUri, artistName);
+
                     mArtistListActivity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.artist_detail_container, fragment)
                             .commit();
                 } else {
                     Context context = v.getContext();
-                    Intent intent = new Intent(context, ArtistDetailActivity.class);
-                    intent.putExtra(ArtistDetailFragment.ARG_ITEM_ID, databaseId);
+                    Intent intent = new Intent(context, ArtistDetailActivity.class).setData(artistIdUri);
+                    intent.putExtra(ArtistDetailFragment.DETAIL_TITLE, artistName);
+                    //intent.putExtra(ArtistDetailFragment.ARG_ITEM_ID, databaseId);
 
                     context.startActivity(intent);
                 }

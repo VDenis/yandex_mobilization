@@ -1,10 +1,12 @@
 package com.denis.home.yandexmobilization.data;
 
 import net.simonvt.schematic.annotation.AutoIncrement;
+import net.simonvt.schematic.annotation.ConflictResolutionType;
 import net.simonvt.schematic.annotation.DataType;
 import net.simonvt.schematic.annotation.DefaultValue;
 import net.simonvt.schematic.annotation.NotNull;
 import net.simonvt.schematic.annotation.PrimaryKey;
+import net.simonvt.schematic.annotation.Unique;
 
 /**
  * Created by Denis on 20.04.2016.
@@ -24,6 +26,7 @@ public class ArtistColumns {
     @DataType(DataType.Type.INTEGER)
     @NotNull
     @DefaultValue(DEFAULT_VALUE_INTEGER)
+    @Unique(onConflict = ConflictResolutionType.REPLACE)
     public static final String ID = "id";
 
     @DataType(DataType.Type.TEXT)

@@ -56,14 +56,18 @@ public class ArtistDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            Bundle arguments = new Bundle();
+/*            Bundle arguments = new Bundle();
             arguments.putString(ArtistDetailFragment.ARG_ITEM_ID,
                     getIntent().getStringExtra(ArtistDetailFragment.ARG_ITEM_ID));
             ArtistDetailFragment fragment = new ArtistDetailFragment();
-            fragment.setArguments(arguments);
+            fragment.setArguments(arguments);*/
+
+            ArtistDetailFragment fragment = ArtistDetailFragment.newInstance(getIntent().getData(), getIntent().getStringExtra(ArtistDetailFragment.DETAIL_TITLE));
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.artist_detail_container, fragment)
                     .commit();
+
+
         }
     }
 

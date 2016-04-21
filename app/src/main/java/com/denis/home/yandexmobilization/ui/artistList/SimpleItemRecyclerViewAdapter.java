@@ -12,11 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.denis.home.yandexmobilization.R;
+import com.denis.home.yandexmobilization.Utility;
 import com.denis.home.yandexmobilization.data.ArtistColumns;
 import com.denis.home.yandexmobilization.data.ArtistProvider;
 import com.denis.home.yandexmobilization.ui.artistDetail.ArtistDetailActivity;
 import com.denis.home.yandexmobilization.ui.artistDetail.ArtistDetailFragment;
-import com.squareup.picasso.Picasso;
 
 /**
  * Created by Denis on 20.04.2016.
@@ -52,17 +52,18 @@ public class SimpleItemRecyclerViewAdapter
         final int databaseId = mCursor.getInt(mCursor.getColumnIndex(ArtistColumns._ID));
 
 
-        final String artistImage = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.SMALL));
+        final String artistImageLink = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.SMALL));
         final String artistName = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.NAME));
         final String artistGenres = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.GENRES));
         final String artistTracksCount = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.TRACKS));
         final String artistAlbumsCount = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.ALBUMS));
 
-        Picasso.with(mArtistListActivity)
+/*        Picasso.with(mArtistListActivity)
                 .load(artistImage)
                 .placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher)
-                .into(holder.mImageView);
+                .into(holder.mImageView);*/
+        Utility.downloadImage(mArtistListActivity, artistImageLink, holder.mImageView);
 
         // Set content description to the artist image
         String imageDescription = String.format(mArtistListActivity.getResources().getString(R.string.a11n_artist_photo_name), artistName);
@@ -71,13 +72,7 @@ public class SimpleItemRecyclerViewAdapter
         holder.mArtistNameView.setText(artistName);
         holder.mArtistGenresView.setText(artistGenres);
 
-        int albumsCount = Integer.valueOf(artistAlbumsCount);
-        int tracksCount = Integer.valueOf(artistTracksCount);
-        //String quantityAlbumsCount = mArtistListActivity.getResources().getQuantityString(R.plurals.plurals_test, 1, 1);
-        String quantityAlbumsCount = mArtistListActivity.getResources().getQuantityString(R.plurals.plurals_albums, albumsCount, albumsCount);
-        //String quantityTracksCount = mArtistListActivity.getResources().getQuantityString(R.plurals.plurals_test, 20, 20);
-        String quantityTracksCount = mArtistListActivity.getResources().getQuantityString(R.plurals.plurals_tracks, tracksCount, tracksCount);
-        String result = String.format(mArtistListActivity.getResources().getString(R.string.artist_tracks_and_albums), quantityAlbumsCount, quantityTracksCount);
+        String result = Utility.getPluralsTracksAndAlbumsString(mArtistListActivity, artistAlbumsCount, artistTracksCount);
         holder.mArtistTracksAndAlbumsView.setText(result);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -135,10 +130,10 @@ public class SimpleItemRecyclerViewAdapter
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mArtistNameView = (TextView) view.findViewById(R.id.artist_name);
-            mArtistGenresView = (TextView) view.findViewById(R.id.artist_genres);
-            mArtistTracksAndAlbumsView = (TextView) view.findViewById(R.id.artist_tracks_and_albums);
-            mImageView = (ImageView) view.findViewById(R.id.image);
+            mArtistNameView = (TextView) view.findViewById(R.id.list_item_artist_name);
+            mArtistGenresView = (TextView) view.findViewById(R.id.list_item_artist_genres);
+            mArtistTracksAndAlbumsView = (TextView) view.findViewById(R.id.list_item_artist_tracks_and_albums);
+            mImageView = (ImageView) view.findViewById(R.id.list_item_image);
         }
 
         @Override

@@ -26,7 +26,7 @@ public class ArtistColumns {
     @DataType(DataType.Type.INTEGER)
     @NotNull
     @DefaultValue(DEFAULT_VALUE_INTEGER)
-    @Unique(onConflict = ConflictResolutionType.REPLACE)
+    @Unique(onConflict = ConflictResolutionType.IGNORE)
     public static final String ID = "id";
 
     @DataType(DataType.Type.TEXT)

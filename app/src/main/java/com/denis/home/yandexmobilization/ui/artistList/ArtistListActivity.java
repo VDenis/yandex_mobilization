@@ -1,15 +1,21 @@
 package com.denis.home.yandexmobilization.ui.artistList;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.denis.home.yandexmobilization.R;
-import com.denis.home.yandexmobilization.dummy.DummyContent;
+import com.denis.home.yandexmobilization.data.ArtistProvider;
+import com.denis.home.yandexmobilization.service.ArtistSyncServiceHelper;
 import com.denis.home.yandexmobilization.ui.artistDetail.ArtistDetailActivity;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 /**
  * An activity representing a list of Artists. This activity
@@ -19,13 +25,16 @@ import com.denis.home.yandexmobilization.ui.artistDetail.ArtistDetailActivity;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class ArtistListActivity extends AppCompatActivity {
+public class ArtistListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
     private boolean mTwoPane;
+    private SimpleItemRecyclerViewAdapter mSimpleItemRecyclerViewAdapter;
+
+    private static final int CURSOR_LOADER_ID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +68,39 @@ public class ArtistListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane));
+        // add divider to the Recycler View
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
+        //mSimpleItemRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane);
+        mSimpleItemRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter(this, mTwoPane);
+        recyclerView.setAdapter(mSimpleItemRecyclerViewAdapter);
+
+        // Launch Loader
+        getSupportLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ArtistSyncServiceHelper.startActionSync(this);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(this,
+                ArtistProvider.Artists.CONTENT_URI,
+                null,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mSimpleItemRecyclerViewAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mSimpleItemRecyclerViewAdapter.swapCursor(null);
+    }
 }

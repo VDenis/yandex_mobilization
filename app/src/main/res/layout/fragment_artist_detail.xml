@@ -1,9 +1,59 @@
-<TextView android:id="@+id/artist_detail"
-          style="?android:attr/textAppearanceLarge"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:padding="16dp"
-          android:textIsSelectable="true"
-          tools:context=".ui.artistDetail.ArtistDetailFragment"/>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.artistDetail.ArtistDetailFragment"
+    >
+    <!-- ems limit the output string, after maxEms shows 3 dots-->
+    <TextView
+        android:id="@+id/detail_artist_genres"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxEms="11"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@color/secondary_text"
+        tools:text="genres genres genres genres genres"/>
+
+    <!--android:layout_marginTop="8dp"-->
+    <TextView
+        android:id="@+id/detail_artist_tracks_and_albums"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:ellipsize="end"
+        android:maxEms="11"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@color/secondary_text"
+        tools:text="tracks and albums tracks and albums tracks and albums"/>
+
+    <!--android:layout_marginTop="8dp"-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:ellipsize="end"
+        android:maxEms="11"
+        android:maxLines="1"
+        android:textColor="@color/primary_text"
+        android:text="@string/artist_biography_article"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        tools:text="biography biography biography biography biography biography"
+        />
+
+    <TextView android:id="@+id/artist_description"
+              style="?android:attr/textAppearanceMedium"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textIsSelectable="true"
+              android:textColor="@color/primary_text"
+              tools:text="description description description description description description"/>
+</LinearLayout>

@@ -6,11 +6,13 @@
                                         xmlns:tools="http://schemas.android.com/tools"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:layout_marginLeft="16dp"
-                                        android:layout_marginRight="16dp"
-                                        android:paddingTop="8dp"
-                                        android:paddingBottom="8dp"
                                         android:clipToPadding="false"
                                         app:layoutManager="LinearLayoutManager"
                                         tools:context=".ui.artistList.ArtistListActivity"
                                         tools:listitem="@layout/list_item_artist"/>
+
+<!--    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"-->
+
+<!--    android:paddingTop="8dp"
+    android:paddingBottom="8dp"-->

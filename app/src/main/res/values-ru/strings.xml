@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Yandex Mobilization</string>
+    <string name="a11n_artist_photo">Фотография артиста</string>
+    <string name="a11n_artist_photo_name">Имя артиста %1$s</string>
+    <string name="title_artist_detail">Страница артиста</string>
+    <string name="artist_biography_article">Биография</string>
+</resources>

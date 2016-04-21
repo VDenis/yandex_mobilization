@@ -106,7 +106,7 @@ public class ArtistSyncService extends IntentService {
             }
             artistJsonStr = buffer.toString();
 
-            deleteOldData();
+            // deleteOldData(); // User in sql ON CONFLICT update
             getArtistDataFromJson(artistJsonStr);
         } catch (IOException e) {
             Log.e(TAG, "Error ", e);

@@ -104,15 +104,19 @@ public class ArtistSyncService extends IntentService {
 
             if (buffer.length() == 0) {
                 // Stream was empty. No point in parsing.
+                // TODO SERVER_DOWN
                 return;
             }
             artistJsonStr = buffer.toString();
 
-            // deleteOldData(); // User in sql ON CONFLICT update
+            deleteOldData(); // Delete previous data
             getArtistDataFromJson(artistJsonStr);
+            // TODO STATUS_OK
         } catch (IOException e) {
+            // TODO Server doen't exist SERVER_DOWN
             Log.e(TAG, "Error ", e);
         } catch (JsonSyntaxException e) {
+            // TODO Server sent bad json SERVER_INVALID
             Log.e(TAG, e.getMessage(), e);
             e.printStackTrace();
         } finally {
@@ -154,6 +158,16 @@ public class ArtistSyncService extends IntentService {
         } catch (RemoteException | OperationApplicationException e) {
             e.printStackTrace();
         }
+
+/*        for (Artist artist : artists) {
+            ContentValues contentValues = ContentProviderValues(artist);
+            int updated = getContentResolver()
+                    .update(ArtistProvider.Artists.CONTENT_URI, contentValues, null, null);
+            if (updated == 0) {
+                getContentResolver()
+                        .insert(ArtistProvider.Artists.CONTENT_URI, contentValues);
+            }
+        }*/
     }
 
     private ContentProviderOperation buildBatchOperation(Artist artist) {
@@ -170,4 +184,18 @@ public class ArtistSyncService extends IntentService {
         builder.withValue(ArtistColumns.BIG, artist.getCover().getBig());
         return builder.build();
     }
+
+/*    private ContentValues ContentProviderValues(Artist artist) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ArtistColumns.ID, artist.getId());
+                contentValues.put(ArtistColumns.NAME, artist.getName());
+        contentValues.put(ArtistColumns.GENRES, TextUtils.join(", ", artist.getGenres()));
+        contentValues.put(ArtistColumns.TRACKS, artist.getTracks());
+        contentValues.put(ArtistColumns.ALBUMS, artist.getAlbums());
+        contentValues.put(ArtistColumns.LINK, artist.getLink());
+        contentValues.put(ArtistColumns.DESCRIPTION, artist.getDescription());
+        contentValues.put(ArtistColumns.SMALL, artist.getCover().getSmall());
+        contentValues.put(ArtistColumns.BIG, artist.getCover().getBig());
+        return contentValues;
+    }*/
 }

@@ -17,11 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.denis.home.yandexmobilization.R;
 import com.denis.home.yandexmobilization.Utility;
 import com.denis.home.yandexmobilization.data.ArtistColumns;
 import com.denis.home.yandexmobilization.ui.artistList.ArtistListActivity;
+import com.squareup.picasso.Callback;
 
 /**
  * A fragment representing a single Artist detail screen.
@@ -179,15 +181,29 @@ public class ArtistDetailFragment extends Fragment implements LoaderManager.Load
 
             // fill views
             if (mArtistPhotoView != null) {
-                Utility.downloadImage(getContext(), artistImageLink, mArtistPhotoView);
-                Log.d(TAG, "onLoadFinished: Update toolbar image");
+
+                    Utility.downloadImage(getContext(), artistImageLink, mArtistPhotoView, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError() {
+                            if (ArtistDetailFragment.this.isAdded() && !Utility.isNetworkAvailable(getContext())) {
+                                Toast.makeText(getContext(), getContext().getString(R.string.empty_artists_detail_no_network), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                    Log.d(TAG, "onLoadFinished: Update toolbar image");
+
             }
             mArtistDescriptionView.setText(artistDescription);
             mArtistGenresView.setText(artistGenres);
             String result = Utility.getPluralsTracksAndAlbumsString(getContext(), artistAlbumsCount, artistTracksCount);
             mArtistTracksAndAlbumsView.setText(result);
 
-            // fill share string
+            // fill
             mShareArtist = String.format("%s%n%n%s%n%s%n%n%s", artistName, artistGenres, result, artistDescription);
         } else {
             Log.d(TAG, "onLoadFinished: Cursor doesn't have elements");

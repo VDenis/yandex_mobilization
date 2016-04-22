@@ -5,4 +5,7 @@
     <string name="a11n_artist_photo_name">Имя артиста %1$s</string>
     <string name="title_artist_detail">Страница артиста</string>
     <string name="artist_biography_article">Биография</string>
+    <string name="a11n_share_button">Поделиться</string>
+    <string name="empty_artists_list">Артисты недоступны, подождите.</string>
+    <string name="empty_artists_list_no_network">Нет интернет соединения.</string>
 </resources>

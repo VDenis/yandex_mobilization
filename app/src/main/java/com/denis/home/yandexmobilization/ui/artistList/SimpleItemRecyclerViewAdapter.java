@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.denis.home.yandexmobilization.R;
 import com.denis.home.yandexmobilization.Utility;
@@ -17,6 +18,7 @@ import com.denis.home.yandexmobilization.data.ArtistColumns;
 import com.denis.home.yandexmobilization.data.ArtistProvider;
 import com.denis.home.yandexmobilization.ui.artistDetail.ArtistDetailActivity;
 import com.denis.home.yandexmobilization.ui.artistDetail.ArtistDetailFragment;
+import com.squareup.picasso.Callback;
 
 /**
  * Created by Denis on 20.04.2016.
@@ -25,11 +27,13 @@ public class SimpleItemRecyclerViewAdapter
         extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
     private ArtistListActivity mArtistListActivity;
+    private ViewSwitcher mViewSwitcher;
     private final boolean mTwoPane;
     private Cursor mCursor;
 
-    public SimpleItemRecyclerViewAdapter(ArtistListActivity artistListActivity, boolean twoPane) {
+    public SimpleItemRecyclerViewAdapter(ArtistListActivity artistListActivity, ViewSwitcher viewSwitcher, boolean twoPane) {
         mArtistListActivity = artistListActivity;
+        mViewSwitcher = viewSwitcher;
         mTwoPane = twoPane;
     }
 
@@ -52,7 +56,7 @@ public class SimpleItemRecyclerViewAdapter
         final String artistTracksCount = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.TRACKS));
         final String artistAlbumsCount = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.ALBUMS));
 
-        Utility.downloadImage(mArtistListActivity, artistImageLink, holder.mImageView);
+        Utility.downloadImage(mArtistListActivity, artistImageLink, holder.mImageView, new Callback.EmptyCallback());
 
         // Set content description to the artist image
         String imageDescription = String.format(mArtistListActivity.getResources().getString(R.string.a11n_artist_photo_name), artistName);
@@ -93,6 +97,15 @@ public class SimpleItemRecyclerViewAdapter
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
+
+        if (newCursor != null && newCursor.getCount() > 0) {
+
+            if (mViewSwitcher != null &&  R.id.artist_list == mViewSwitcher.getNextView().getId()) {
+                mViewSwitcher.showNext();
+            }
+        } else if (mViewSwitcher != null && R.id.listview_artist_empty == mViewSwitcher.getNextView().getId()) {
+            mViewSwitcher.showNext();
+        }
     }
 
     public Cursor getCursor() {

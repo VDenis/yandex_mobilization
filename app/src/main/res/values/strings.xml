@@ -7,7 +7,14 @@
 
     <!-- a11n -->
     <string name="a11n_artist_photo">Artist photo</string>
+    <string name="a11n_share_button">Share</string>
     <string name="a11n_artist_photo_name">The artist name is %1$s</string>
+
     <string name="artist_biography_article">Biography</string>
+
+    <!-- Empty Artists Database -->
+    <string name="empty_artists_list">No artists available.</string>
+    <string name="empty_artists_list_no_network">The network is not available to fetch artists. Turn on and try again)</string>
+    <string name="empty_artists_detail_no_network">The network is not available to fetch artist photo. Turn on and try again)</string>
 
 </resources>

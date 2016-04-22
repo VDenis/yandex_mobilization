@@ -10,8 +10,12 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.animation.AnimationUtils;
+import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.denis.home.yandexmobilization.R;
+import com.denis.home.yandexmobilization.Utility;
 import com.denis.home.yandexmobilization.data.ArtistProvider;
 import com.denis.home.yandexmobilization.service.ArtistSyncServiceHelper;
 import com.denis.home.yandexmobilization.ui.artistDetail.ArtistDetailActivity;
@@ -78,7 +82,13 @@ public class ArtistListActivity extends AppCompatActivity implements LoaderManag
         // add divider to the Recycler View
         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
 
-        mSimpleItemRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter(this, mTwoPane);
+        ViewSwitcher viewSwitcher = (ViewSwitcher) findViewById(R.id.switcher);
+        if (viewSwitcher != null) {
+            viewSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_left)); // slide_in_left
+            viewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_right)); // slide_out_right
+        }
+        mSimpleItemRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter(this, viewSwitcher, mTwoPane);
+
         recyclerView.setAdapter(mSimpleItemRecyclerViewAdapter);
 
         // Launch Loader
@@ -90,7 +100,12 @@ public class ArtistListActivity extends AppCompatActivity implements LoaderManag
         super.onStart();
 
         // start background synchronization service
-        ArtistSyncServiceHelper.startActionSync(this);
+        // check network connection
+        if (Utility.isNetworkAvailable(this)) {
+            ArtistSyncServiceHelper.startActionSync(this);
+        } else {
+            Toast.makeText(ArtistListActivity.this, getString(R.string.empty_artists_list_no_network), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

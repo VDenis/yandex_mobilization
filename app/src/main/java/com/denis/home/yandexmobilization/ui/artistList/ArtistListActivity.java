@@ -78,6 +78,10 @@ public class ArtistListActivity extends AppCompatActivity implements LoaderManag
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+
+        if (savedInstanceState == null) {
+            startSync();
+        }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -97,12 +101,12 @@ public class ArtistListActivity extends AppCompatActivity implements LoaderManag
         getSupportLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
     }
 
-    @Override
+/*    @Override
     protected void onStart() {
         super.onStart();
 
         startSync();
-    }
+    }*/
 
     private void startSync() {
         // start background synchronization service

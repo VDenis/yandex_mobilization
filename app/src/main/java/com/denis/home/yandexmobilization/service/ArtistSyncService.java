@@ -146,6 +146,9 @@ public class ArtistSyncService extends IntentService {
 
         // Prepare data
         ArrayList<ContentProviderOperation> batchOperations = new ArrayList<>();
+
+        //batchOperations.add(buildDeleteAllBatchOperation());
+
         for (Artist artist : artists) {
             batchOperations.add(buildBatchOperation(artist));
         }
@@ -168,6 +171,12 @@ public class ArtistSyncService extends IntentService {
                         .insert(ArtistProvider.Artists.CONTENT_URI, contentValues);
             }
         }*/
+    }
+
+    private ContentProviderOperation buildDeleteAllBatchOperation() {
+        ContentProviderOperation.Builder builder = ContentProviderOperation
+                .newDelete(ArtistProvider.Artists.CONTENT_URI);
+        return builder.build();
     }
 
     private ContentProviderOperation buildBatchOperation(Artist artist) {

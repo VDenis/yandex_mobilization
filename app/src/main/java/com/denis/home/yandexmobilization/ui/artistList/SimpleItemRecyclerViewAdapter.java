@@ -30,6 +30,7 @@ public class SimpleItemRecyclerViewAdapter
     private ViewSwitcher mViewSwitcher;
     private final boolean mTwoPane;
     private Cursor mCursor;
+    private boolean isRefreshing;
 
     public SimpleItemRecyclerViewAdapter(ArtistListActivity artistListActivity, ViewSwitcher viewSwitcher, boolean twoPane) {
         mArtistListActivity = artistListActivity;
@@ -71,18 +72,20 @@ public class SimpleItemRecyclerViewAdapter
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri artistIdUri = ArtistProvider.Artists.withId(databaseId);
-                if (mTwoPane) {
-                    ArtistDetailFragment fragment = ArtistDetailFragment.newInstance(artistIdUri, artistName);
+                if (!isRefreshing) {
+                    Uri artistIdUri = ArtistProvider.Artists.withId(databaseId);
+                    if (mTwoPane) {
+                        ArtistDetailFragment fragment = ArtistDetailFragment.newInstance(artistIdUri, artistName);
 
-                    mArtistListActivity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.artist_detail_container, fragment)
-                            .commit();
-                } else {
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, ArtistDetailActivity.class).setData(artistIdUri);
-                    intent.putExtra(ArtistDetailFragment.DETAIL_TITLE, artistName);
-                    context.startActivity(intent);
+                        mArtistListActivity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.artist_detail_container, fragment)
+                                .commit();
+                    } else {
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, ArtistDetailActivity.class).setData(artistIdUri);
+                        intent.putExtra(ArtistDetailFragment.DETAIL_TITLE, artistName);
+                        context.startActivity(intent);
+                    }
                 }
             }
         });
@@ -99,11 +102,12 @@ public class SimpleItemRecyclerViewAdapter
         notifyDataSetChanged();
 
         if (newCursor != null && newCursor.getCount() > 0) {
-
             if (mViewSwitcher != null &&  R.id.artist_list == mViewSwitcher.getNextView().getId()) {
+                isRefreshing = false;
                 mViewSwitcher.showNext();
             }
         } else if (mViewSwitcher != null && R.id.listview_artist_empty == mViewSwitcher.getNextView().getId()) {
+            isRefreshing = true;
             mViewSwitcher.showNext();
         }
     }

@@ -10,6 +10,8 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -99,6 +101,10 @@ public class ArtistListActivity extends AppCompatActivity implements LoaderManag
     protected void onStart() {
         super.onStart();
 
+        startSync();
+    }
+
+    private void startSync() {
         // start background synchronization service
         // check network connection
         if (Utility.isNetworkAvailable(this)) {
@@ -129,6 +135,25 @@ public class ArtistListActivity extends AppCompatActivity implements LoaderManag
             Parcelable listState = mBundleRecyclerViewState.getParcelable(KEY_RECYCLER_STATE);
             mRecyclerView.getLayoutManager().onRestoreInstanceState(listState);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_refresh) {
+            startSync();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

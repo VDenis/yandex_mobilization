@@ -3,9 +3,11 @@
     <string name="app_name">Yandex Mobilization</string>
     <string name="a11n_artist_photo">Фотография артиста</string>
     <string name="a11n_artist_photo_name">Имя артиста %1$s</string>
-    <string name="title_artist_detail">Страница артиста</string>
+    <string name="title_artist_detail">Информация об артисте</string>
     <string name="artist_biography_article">Биография</string>
     <string name="a11n_share_button">Поделиться</string>
-    <string name="empty_artists_list">Артисты недоступны, подождите.</string>
-    <string name="empty_artists_list_no_network">Нет интернет соединения.</string>
+    <string name="empty_artists_list">Данные недоступны, подождите.</string>
+    <string name="empty_artists_list_no_network">Сеть недоступна. Включите и попробуйте еще раз)</string>
+    <string name="action_refresh">Обновить</string>
+    <string name="empty_artists_detail_no_network">Сеть недоступна. Включите и попробуйте еще раз)</string>
 </resources>

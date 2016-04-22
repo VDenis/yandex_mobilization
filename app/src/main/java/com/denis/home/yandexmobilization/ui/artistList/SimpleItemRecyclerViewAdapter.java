@@ -25,14 +25,11 @@ public class SimpleItemRecyclerViewAdapter
         extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
     private ArtistListActivity mArtistListActivity;
-    //private final List<DummyContent.DummyItem> mValues;
     private final boolean mTwoPane;
     private Cursor mCursor;
 
-    //public SimpleItemRecyclerViewAdapter(ArtistListActivity artistListActivity, List<DummyContent.DummyItem> items, boolean twoPane) {
     public SimpleItemRecyclerViewAdapter(ArtistListActivity artistListActivity, boolean twoPane) {
         mArtistListActivity = artistListActivity;
-        //mValues = items;
         mTwoPane = twoPane;
     }
 
@@ -47,10 +44,7 @@ public class SimpleItemRecyclerViewAdapter
     public void onBindViewHolder(final ViewHolder holder, int position) {
         mCursor.moveToPosition(position);
 
-        //holder.mItem = mValues.get(position);
-
         final int databaseId = mCursor.getInt(mCursor.getColumnIndex(ArtistColumns._ID));
-
 
         final String artistImageLink = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.SMALL));
         final String artistName = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.NAME));
@@ -58,11 +52,6 @@ public class SimpleItemRecyclerViewAdapter
         final String artistTracksCount = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.TRACKS));
         final String artistAlbumsCount = mCursor.getString(mCursor.getColumnIndex(ArtistColumns.ALBUMS));
 
-/*        Picasso.with(mArtistListActivity)
-                .load(artistImage)
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
-                .into(holder.mImageView);*/
         Utility.downloadImage(mArtistListActivity, artistImageLink, holder.mImageView);
 
         // Set content description to the artist image
@@ -80,11 +69,6 @@ public class SimpleItemRecyclerViewAdapter
             public void onClick(View v) {
                 Uri artistIdUri = ArtistProvider.Artists.withId(databaseId);
                 if (mTwoPane) {
-/*                    Bundle arguments = new Bundle();
-                    arguments.putString(ArtistDetailFragment.ARG_ITEM_ID, String.valueOf(databaseId)); // TODO: change String.valueOf()
-                    ArtistDetailFragment fragment = new ArtistDetailFragment();
-                    fragment.setArguments(arguments);*/
-
                     ArtistDetailFragment fragment = ArtistDetailFragment.newInstance(artistIdUri, artistName);
 
                     mArtistListActivity.getSupportFragmentManager().beginTransaction()
@@ -94,8 +78,6 @@ public class SimpleItemRecyclerViewAdapter
                     Context context = v.getContext();
                     Intent intent = new Intent(context, ArtistDetailActivity.class).setData(artistIdUri);
                     intent.putExtra(ArtistDetailFragment.DETAIL_TITLE, artistName);
-                    //intent.putExtra(ArtistDetailFragment.ARG_ITEM_ID, databaseId);
-
                     context.startActivity(intent);
                 }
             }
@@ -104,8 +86,6 @@ public class SimpleItemRecyclerViewAdapter
 
     @Override
     public int getItemCount() {
-        //return mValues.size();
-
         if (null == mCursor) return 0;
         return mCursor.getCount();
     }
@@ -125,7 +105,6 @@ public class SimpleItemRecyclerViewAdapter
         public final TextView mArtistTracksAndAlbumsView;
         public final TextView mArtistGenresView;
         public final ImageView mImageView;
-        //public DummyContent.DummyItem mItem;
 
         public ViewHolder(View view) {
             super(view);

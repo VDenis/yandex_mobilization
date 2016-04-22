@@ -28,16 +28,16 @@ import java.util.ArrayList;
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
- * <p/>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
  */
 public class ArtistSyncService extends IntentService {
     private final static String TAG = ArtistSyncService.class.getSimpleName();
 
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
+    // IntentService can perform next actions: ACTION_SYNC
     public static final String ACTION_SYNC = "com.denis.home.yandexmobilization.service.action.SYNC";
+
+    // Parameters EXTRA_URL - base url
     public static final String EXTRA_URL = "com.denis.home.yandexmobilization.service.extra.URL";
+
     private Context mContext;
 
     public ArtistSyncService() {
@@ -52,7 +52,9 @@ public class ArtistSyncService extends IntentService {
 
         if (intent != null) {
             final String action = intent.getAction();
+            // Check action
             if (ACTION_SYNC.equals(action)) {
+                // Get link parameter
                 final String param1 = intent.getStringExtra(EXTRA_URL);
                 handleActionSync(param1);
             } else {
@@ -101,7 +103,7 @@ public class ArtistSyncService extends IntentService {
             }
 
             if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
+                // Stream was empty. No point in parsing.
                 return;
             }
             artistJsonStr = buffer.toString();
@@ -134,25 +136,29 @@ public class ArtistSyncService extends IntentService {
 
     // Parse json and store artists into database
     public void getArtistDataFromJson(String artistJsonStr) throws JsonSyntaxException {
+        // Deserialize json into pojo
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Artist[] artists = gson.fromJson(artistJsonStr, Artist[].class);
 
+        // Prepare data
         ArrayList<ContentProviderOperation> batchOperations = new ArrayList<>();
         for (Artist artist : artists) {
             batchOperations.add(buildBatchOperation(artist));
         }
+
+        // Store data into database
         try {
-            mContext.getContentResolver().applyBatch(ArtistProvider.AUTHORITY,
-                    batchOperations);
-            Log.d(TAG, "getArtistDataFromJson: Insert Batch into database - " +artists.length);
+            mContext.getContentResolver()
+                    .applyBatch(ArtistProvider.AUTHORITY, batchOperations);
+            Log.d(TAG, "getArtistDataFromJson: Insert Batch into database - " + artists.length);
         } catch (RemoteException | OperationApplicationException e) {
             e.printStackTrace();
         }
     }
 
     private ContentProviderOperation buildBatchOperation(Artist artist) {
-        ContentProviderOperation.Builder builder = ContentProviderOperation.newInsert(
-                ArtistProvider.Artists.CONTENT_URI);
+        ContentProviderOperation.Builder builder = ContentProviderOperation
+                .newInsert(ArtistProvider.Artists.CONTENT_URI);
         builder.withValue(ArtistColumns.ID, artist.getId());
         builder.withValue(ArtistColumns.NAME, artist.getName());
         builder.withValue(ArtistColumns.GENRES, TextUtils.join(", ", artist.getGenres()));

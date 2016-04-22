@@ -12,11 +12,11 @@ import net.simonvt.schematic.annotation.Unique;
  * Created by Denis on 20.04.2016.
  */
 public class ArtistColumns {
-    public static final String EMPTY_STRING = "";
-    public static final int ZERO_INT = 0;
+    public static final String EMPTY_STRING = ""; // Empty String; if change this, change DEFAULT_VALUE_TEXT also
+    public static final int ZERO_INT = 0; // Number, integer, like 0,1,2; if change this, change DEFAULT_VALUE_INTEGER also
 
-    private static final String DEFAULT_VALUE_TEXT = "''";
-    private static final String DEFAULT_VALUE_INTEGER = "0"; // Number, integer, like 0,1,2
+    private static final String DEFAULT_VALUE_TEXT = "''"; // Empty String; if change this, change EMPTY_STRING also
+    private static final String DEFAULT_VALUE_INTEGER = "0"; // Number, integer, like 0,1,2; if change this, change ZERO_INT also
 
     @DataType(DataType.Type.INTEGER)
     @PrimaryKey

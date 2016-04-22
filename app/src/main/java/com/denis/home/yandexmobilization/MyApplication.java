@@ -20,11 +20,13 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        // Use developer tools only in devel configuration
         if (BuildConfig.FLAVOR.equals("devel")) {
             Stetho.initializeWithDefaults(this);
             Picasso.with(this).setIndicatorsEnabled(true);
         }
 
+        // set up http cache
         try {
             File httpCacheDir = new File(getCacheDir(), "http");
             long httpCacheSize = 10 * 1024 * 1024; // 10 MiB

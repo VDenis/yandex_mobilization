@@ -29,15 +29,6 @@ public class ArtistDetailActivity extends AppCompatActivity implements ArtistDet
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
-/*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -56,18 +47,11 @@ public class ArtistDetailActivity extends AppCompatActivity implements ArtistDet
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-/*            Bundle arguments = new Bundle();
-            arguments.putString(ArtistDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(ArtistDetailFragment.ARG_ITEM_ID));
-            ArtistDetailFragment fragment = new ArtistDetailFragment();
-            fragment.setArguments(arguments);*/
-
-            ArtistDetailFragment fragment = ArtistDetailFragment.newInstance(getIntent().getData(), getIntent().getStringExtra(ArtistDetailFragment.DETAIL_TITLE));
+            ArtistDetailFragment fragment = ArtistDetailFragment
+                    .newInstance(getIntent().getData(), getIntent().getStringExtra(ArtistDetailFragment.DETAIL_TITLE));
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.artist_detail_container, fragment)
                     .commit();
-
-
         }
     }
 
@@ -88,16 +72,19 @@ public class ArtistDetailActivity extends AppCompatActivity implements ArtistDet
         return super.onOptionsItemSelected(item);
     }
 
+    // Fragment call this methods
     @Override
     public CollapsingToolbarLayout getCollapsingToolbarLayout() {
         return (CollapsingToolbarLayout)findViewById(R.id.toolbar_layout);
     }
 
+    // Fragment call this methods
     @Override
     public ImageView getArtistDetailPhoto() {
         return (ImageView) findViewById(R.id.artist_detail_photo);
     }
 
+    // Fragment call this methods
     @Override
     public FloatingActionButton getShareButton() {
         return (FloatingActionButton) findViewById(R.id.fab);

@@ -18,6 +18,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    productFlavors {
+        devel  {
+            applicationId "com.denis.home.yandexmobilization.devel"
+            buildConfigField 'String', 'SERVER_PATH', '"https://dl.dropboxusercontent.com/u/55518874/YandexMobilizationJson_200416/artists.json"'
+        }
+        prod {
+            applicationId "com.denis.home.yandexmobilization.prod"
+            buildConfigField 'String', 'SERVER_PATH', '"http://cache-default01h.cdn.yandex.net/download.cdn.yandex.net/mobilization-2016/artists.json"'
+        }
+    }
 }
 
 dependencies {

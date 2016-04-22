@@ -158,16 +158,7 @@ public class ArtistSyncService extends IntentService {
         builder.withValue(ArtistColumns.GENRES, TextUtils.join(", ", artist.getGenres()));
         builder.withValue(ArtistColumns.TRACKS, artist.getTracks());
         builder.withValue(ArtistColumns.ALBUMS, artist.getAlbums());
-
-        // TODO Database error null field - Solved
         builder.withValue(ArtistColumns.LINK, artist.getLink());
-        //builder.withValue(ArtistColumns.LINK, artist.getLink() != null ? artist.getLink() : "" );
-/*        if (artist.getLink() != null) {
-            builder.withValue(ArtistColumns.LINK, artist.getLink());
-        } else {
-            Log.w(TAG, "buildBatchOperation: " + artist.getName());
-        }*/
-
         builder.withValue(ArtistColumns.DESCRIPTION, artist.getDescription());
         builder.withValue(ArtistColumns.SMALL, artist.getCover().getSmall());
         builder.withValue(ArtistColumns.BIG, artist.getCover().getBig());

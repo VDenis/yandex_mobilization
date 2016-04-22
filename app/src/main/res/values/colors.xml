@@ -6,11 +6,6 @@
     <color name="grey_700">#646464</color>
     <color name="black">#000000</color>
 
-<!--    <color name="colorPrimary">#3F51B5</color> &lt;!&ndash; 500 &ndash;&gt;
-    <color name="colorPrimaryDark">#303F9F</color> &lt;!&ndash; 700 &ndash;&gt;
-    <color name="primary_light">#B3E5FC</color> &lt;!&ndash; 100 &ndash;&gt;
-    <color name="colorAccent">#FF4081</color>-->
-
     <color name="colorPrimary">#9B26AF</color> <!-- 500 -->
     <!--<color name="colorPrimaryDark">#7A1EA1</color> &lt;!&ndash; 700 &ndash;&gt;-->
     <color name="colorPrimaryDark">#691A99</color> <!-- 800 -->

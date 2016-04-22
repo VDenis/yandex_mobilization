@@ -2,11 +2,14 @@ package com.denis.home.yandexmobilization.ui.artistDetail;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.denis.home.yandexmobilization.R;
 import com.denis.home.yandexmobilization.ui.artistList.ArtistListActivity;
@@ -17,7 +20,7 @@ import com.denis.home.yandexmobilization.ui.artistList.ArtistListActivity;
  * item details are presented side-by-side with a list of items
  * in a {@link ArtistListActivity}.
  */
-public class ArtistDetailActivity extends AppCompatActivity {
+public class ArtistDetailActivity extends AppCompatActivity implements ArtistDetailFragment.DetailFragmentable {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,5 +86,20 @@ public class ArtistDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public CollapsingToolbarLayout getCollapsingToolbarLayout() {
+        return (CollapsingToolbarLayout)findViewById(R.id.toolbar_layout);
+    }
+
+    @Override
+    public ImageView getArtistDetailPhoto() {
+        return (ImageView) findViewById(R.id.artist_detail_photo);
+    }
+
+    @Override
+    public FloatingActionButton getShareButton() {
+        return (FloatingActionButton) findViewById(R.id.fab);
     }
 }

@@ -1,11 +1,12 @@
 package com.denis.home.yandexmobilization.ui.artistDetail;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -39,6 +40,10 @@ public class ArtistDetailFragment extends Fragment implements LoaderManager.Load
 
     public static final String DETAIL_URI = "URI";
     public static final String DETAIL_TITLE = "TITLE";
+
+    // Share functionality
+    private static final String YANDEX_MOBILIZATION_SHARE_HASHTAG = " #YandexMobilization";
+    private String mShareArtist;
 
     private Uri mUri;
     private String mTitle;
@@ -92,8 +97,8 @@ public class ArtistDetailFragment extends Fragment implements LoaderManager.Load
         if (getArguments() != null) {
             mUri = getArguments().getParcelable(DETAIL_URI);
             mTitle = getArguments().getString(DETAIL_TITLE);
-            Activity activity = this.getActivity();
-/*            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            /*Activity activity = this.getActivity();
+            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
 
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mTitle);
@@ -117,23 +122,44 @@ public class ArtistDetailFragment extends Fragment implements LoaderManager.Load
         return rootView;
     }
 
+    interface DetailFragmentable {
+        CollapsingToolbarLayout getCollapsingToolbarLayout();
+        ImageView getArtistDetailPhoto();
+        FloatingActionButton getShareButton();
+    }
+
+    private Intent createShareArtistIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, mShareArtist + YANDEX_MOBILIZATION_SHARE_HASHTAG);
+        return shareIntent;
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //getActivity().getSupportLoaderManager().initLoader(DETAIL_CURSOR_LOADER_ID, null, this);
         // Find image view in toolbar
 
-        CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) getActivity().findViewById(R.id.toolbar_layout);
+        CollapsingToolbarLayout appBarLayout = ((DetailFragmentable) getActivity()).getCollapsingToolbarLayout();
         if (appBarLayout != null) {
             appBarLayout.setTitle(mTitle);
             Log.d(TAG, "onActivityCreated: Update toolbar title");
         }
 
-        mArtistPhotoView = (ImageView) getActivity().findViewById(R.id.artist_detail_photo);
+        mArtistPhotoView = ((DetailFragmentable) getActivity()).getArtistDetailPhoto();
 
-        //getLoaderManager().initLoader(DETAIL_CURSOR_LOADER_ID, null, this);
+        FloatingActionButton fab = ((DetailFragmentable) getActivity()).getShareButton();
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = createShareArtistIntent();
+                startActivity(intent);
+            }
+        });
 
-        if(getLoaderManager().getLoader(DETAIL_CURSOR_LOADER_ID) == null) {
+        if (getLoaderManager().getLoader(DETAIL_CURSOR_LOADER_ID) == null) {
             getLoaderManager().initLoader(DETAIL_CURSOR_LOADER_ID, null, this);
         } else {
             getLoaderManager().restartLoader(DETAIL_CURSOR_LOADER_ID, null, this);
@@ -149,7 +175,7 @@ public class ArtistDetailFragment extends Fragment implements LoaderManager.Load
             // Now create and return a CursorLoader that will take care of
             // creating a Cursor for the data being displayed.
             return new CursorLoader(
-                    getActivity(),
+                    getContext(),
                     mUri,
                     null,
                     null,
@@ -164,7 +190,9 @@ public class ArtistDetailFragment extends Fragment implements LoaderManager.Load
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
             Log.d(TAG, "onLoadFinished: Cursor have elements");
-            String artistName = data.getString(data.getColumnIndex(ArtistColumns.DESCRIPTION));
+
+            String artistName = data.getString(data.getColumnIndex(ArtistColumns.NAME));
+            String artistDescription = data.getString(data.getColumnIndex(ArtistColumns.DESCRIPTION));
             final String artistImageLink = data.getString(data.getColumnIndex(ArtistColumns.BIG));
             final String artistGenres = data.getString(data.getColumnIndex(ArtistColumns.GENRES));
             final String artistTracksCount = data.getString(data.getColumnIndex(ArtistColumns.TRACKS));
@@ -174,10 +202,12 @@ public class ArtistDetailFragment extends Fragment implements LoaderManager.Load
                 Utility.downloadImage(getContext(), artistImageLink, mArtistPhotoView);
                 Log.d(TAG, "onLoadFinished: Update toolbar image");
             }
-            mArtistDescriptionView.setText(artistName);
+            mArtistDescriptionView.setText(artistDescription);
             mArtistGenresView.setText(artistGenres);
             String result = Utility.getPluralsTracksAndAlbumsString(getContext(), artistAlbumsCount, artistTracksCount);
             mArtistTracksAndAlbumsView.setText(result);
+
+            mShareArtist = String.format("%s%n%n%s%n%s%n%n%s", artistName, artistGenres, result, artistDescription);
         } else {
             Log.d(TAG, "onLoadFinished: Cursor doesn't have elements");
         }

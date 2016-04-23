@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <color name="white">#FFFFFF</color>
-    <color name="grey">#cccccc</color>
-    <color name="grey_700">#646464</color>
-    <color name="black">#000000</color>
-
     <color name="colorPrimary">#9B26AF</color> <!-- 500 -->
-    <!--<color name="colorPrimaryDark">#7A1EA1</color> &lt;!&ndash; 700 &ndash;&gt;-->
     <color name="colorPrimaryDark">#691A99</color> <!-- 800 -->
     <color name="primary_light">#E1BEE7</color> <!-- 100 -->
     <color name="colorAccent">#69f0ae</color>

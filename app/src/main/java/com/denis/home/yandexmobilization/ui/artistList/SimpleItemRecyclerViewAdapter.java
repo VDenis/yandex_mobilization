@@ -1,9 +1,11 @@
 package com.denis.home.yandexmobilization.ui.artistList;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +64,7 @@ public class SimpleItemRecyclerViewAdapter
         // Set content description to the artist image
         String imageDescription = String.format(mArtistListActivity.getResources().getString(R.string.a11n_artist_photo_name), artistName);
         holder.mImageView.setContentDescription(imageDescription);
+        //ViewCompat.setTransitionName(holder.mImageView, "imageTransition" + databaseId);
 
         holder.mArtistNameView.setText(artistName);
         holder.mArtistGenresView.setText(artistGenres);
@@ -84,7 +87,25 @@ public class SimpleItemRecyclerViewAdapter
                         Context context = v.getContext();
                         Intent intent = new Intent(context, ArtistDetailActivity.class).setData(artistIdUri);
                         intent.putExtra(ArtistDetailFragment.DETAIL_TITLE, artistName);
-                        context.startActivity(intent);
+
+/*                        ActivityOptionsCompat options = ActivityOptionsCompat.
+                                makeSceneTransitionAnimation(mArtistListActivity, holder.mImageView, "profile");*/
+
+/*                        ActivityOptionsCompat options =
+                                ActivityOptionsCompat.makeSceneTransitionAnimation(mArtistListActivity
+                                        ,Pair.create((View)holder.mImageView, ViewCompat.getTransitionName(holder.mImageView))
+                                );*/
+                        //ActivityCompat.startActivity(mArtistListActivity, intent, null);
+
+                        //context.startActivity(intent);
+/*                        ActivityOptionsCompat options =
+                                ActivityOptionsCompat.makeSceneTransitionAnimation(mArtistListActivity);
+                        ActivityCompat.startActivity(mArtistListActivity, intent, options.toBundle());*/
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(mArtistListActivity).toBundle());
+                        } else {
+                            context.startActivity(intent);
+                        }
                     }
                 }
             }

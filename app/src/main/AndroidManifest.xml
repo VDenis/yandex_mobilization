@@ -16,6 +16,7 @@
         <activity
             android:name=".ui.artistList.ArtistListActivity"
             android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -27,7 +28,7 @@
             android:name=".ui.artistDetail.ArtistDetailActivity"
             android:label="@string/title_artist_detail"
             android:parentActivityName=".ui.artistList.ArtistListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.Details">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.artistList.ArtistListActivity"/>

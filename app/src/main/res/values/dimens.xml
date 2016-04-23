@@ -4,4 +4,13 @@
     <dimen name="app_bar_height">300dp</dimen>
     <dimen name="item_width">200dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <dimen name="artist_detail_content_margin">16dp</dimen>
+    <dimen name="artist_detail_vertical_margin">8dp</dimen>
+
+    <dimen name="artist_list_list_item_margin">16dp</dimen>
+    <dimen name="artist_list_list_item_image_view_size">150dp</dimen>
+
+    <dimen name="two_pane_artist_list_margin">16dp</dimen>
+    <dimen name="two_pane_page_margin">16dp</dimen>
 </resources>

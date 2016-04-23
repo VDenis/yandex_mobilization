@@ -4,6 +4,7 @@ import com.denis.home.yandexmobilization.data.ArtistColumns;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+// Class for json serialisation
 public class Cover {
 
     @SerializedName("small")

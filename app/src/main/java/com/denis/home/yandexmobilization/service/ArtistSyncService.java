@@ -28,16 +28,16 @@ import java.util.ArrayList;
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
- * <p/>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
  */
 public class ArtistSyncService extends IntentService {
     private final static String TAG = ArtistSyncService.class.getSimpleName();
 
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
+    // IntentService can perform next actions: ACTION_SYNC
     public static final String ACTION_SYNC = "com.denis.home.yandexmobilization.service.action.SYNC";
+
+    // Parameters EXTRA_URL - base url
     public static final String EXTRA_URL = "com.denis.home.yandexmobilization.service.extra.URL";
+
     private Context mContext;
 
     public ArtistSyncService() {
@@ -52,7 +52,9 @@ public class ArtistSyncService extends IntentService {
 
         if (intent != null) {
             final String action = intent.getAction();
+            // Check action
             if (ACTION_SYNC.equals(action)) {
+                // Get link parameter
                 final String param1 = intent.getStringExtra(EXTRA_URL);
                 handleActionSync(param1);
             } else {
@@ -101,16 +103,20 @@ public class ArtistSyncService extends IntentService {
             }
 
             if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
+                // Stream was empty. No point in parsing.
+                // TODO SERVER_DOWN
                 return;
             }
             artistJsonStr = buffer.toString();
 
-            // deleteOldData(); // User in sql ON CONFLICT update
+            deleteOldData(); // Delete previous data
             getArtistDataFromJson(artistJsonStr);
+            // TODO STATUS_OK
         } catch (IOException e) {
+            // TODO Server doen't exist SERVER_DOWN
             Log.e(TAG, "Error ", e);
         } catch (JsonSyntaxException e) {
+            // TODO Server sent bad json SERVER_INVALID
             Log.e(TAG, e.getMessage(), e);
             e.printStackTrace();
         } finally {
@@ -134,43 +140,59 @@ public class ArtistSyncService extends IntentService {
 
     // Parse json and store artists into database
     public void getArtistDataFromJson(String artistJsonStr) throws JsonSyntaxException {
+        // Deserialize json into pojo
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Artist[] artists = gson.fromJson(artistJsonStr, Artist[].class);
 
+        // Prepare data
         ArrayList<ContentProviderOperation> batchOperations = new ArrayList<>();
+
         for (Artist artist : artists) {
             batchOperations.add(buildBatchOperation(artist));
         }
+
+        // Store data into database
         try {
-            mContext.getContentResolver().applyBatch(ArtistProvider.AUTHORITY,
-                    batchOperations);
-            Log.d(TAG, "getArtistDataFromJson: Insert Batch into database - " +artists.length);
+            mContext.getContentResolver()
+                    .applyBatch(ArtistProvider.AUTHORITY, batchOperations);
+            Log.d(TAG, "getArtistDataFromJson: Insert Batch into database - " + artists.length);
         } catch (RemoteException | OperationApplicationException e) {
             e.printStackTrace();
         }
     }
 
+    private ContentProviderOperation buildDeleteAllBatchOperation() {
+        ContentProviderOperation.Builder builder = ContentProviderOperation
+                .newDelete(ArtistProvider.Artists.CONTENT_URI);
+        return builder.build();
+    }
+
     private ContentProviderOperation buildBatchOperation(Artist artist) {
-        ContentProviderOperation.Builder builder = ContentProviderOperation.newInsert(
-                ArtistProvider.Artists.CONTENT_URI);
+        ContentProviderOperation.Builder builder = ContentProviderOperation
+                .newInsert(ArtistProvider.Artists.CONTENT_URI);
         builder.withValue(ArtistColumns.ID, artist.getId());
         builder.withValue(ArtistColumns.NAME, artist.getName());
         builder.withValue(ArtistColumns.GENRES, TextUtils.join(", ", artist.getGenres()));
         builder.withValue(ArtistColumns.TRACKS, artist.getTracks());
         builder.withValue(ArtistColumns.ALBUMS, artist.getAlbums());
-
-        // TODO Database error null field - Solved
         builder.withValue(ArtistColumns.LINK, artist.getLink());
-        //builder.withValue(ArtistColumns.LINK, artist.getLink() != null ? artist.getLink() : "" );
-/*        if (artist.getLink() != null) {
-            builder.withValue(ArtistColumns.LINK, artist.getLink());
-        } else {
-            Log.w(TAG, "buildBatchOperation: " + artist.getName());
-        }*/
-
         builder.withValue(ArtistColumns.DESCRIPTION, artist.getDescription());
         builder.withValue(ArtistColumns.SMALL, artist.getCover().getSmall());
         builder.withValue(ArtistColumns.BIG, artist.getCover().getBig());
         return builder.build();
     }
+
+/*    private ContentValues ContentProviderValues(Artist artist) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ArtistColumns.ID, artist.getId());
+                contentValues.put(ArtistColumns.NAME, artist.getName());
+        contentValues.put(ArtistColumns.GENRES, TextUtils.join(", ", artist.getGenres()));
+        contentValues.put(ArtistColumns.TRACKS, artist.getTracks());
+        contentValues.put(ArtistColumns.ALBUMS, artist.getAlbums());
+        contentValues.put(ArtistColumns.LINK, artist.getLink());
+        contentValues.put(ArtistColumns.DESCRIPTION, artist.getDescription());
+        contentValues.put(ArtistColumns.SMALL, artist.getCover().getSmall());
+        contentValues.put(ArtistColumns.BIG, artist.getCover().getBig());
+        return contentValues;
+    }*/
 }

@@ -2,11 +2,14 @@ package com.denis.home.yandexmobilization.ui.artistDetail;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.denis.home.yandexmobilization.R;
 import com.denis.home.yandexmobilization.ui.artistList.ArtistListActivity;
@@ -17,7 +20,7 @@ import com.denis.home.yandexmobilization.ui.artistList.ArtistListActivity;
  * item details are presented side-by-side with a list of items
  * in a {@link ArtistListActivity}.
  */
-public class ArtistDetailActivity extends AppCompatActivity {
+public class ArtistDetailActivity extends AppCompatActivity implements ArtistDetailFragment.DetailFragmentable {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +28,6 @@ public class ArtistDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_artist_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
-
-/*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -53,18 +47,11 @@ public class ArtistDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-/*            Bundle arguments = new Bundle();
-            arguments.putString(ArtistDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(ArtistDetailFragment.ARG_ITEM_ID));
-            ArtistDetailFragment fragment = new ArtistDetailFragment();
-            fragment.setArguments(arguments);*/
-
-            ArtistDetailFragment fragment = ArtistDetailFragment.newInstance(getIntent().getData(), getIntent().getStringExtra(ArtistDetailFragment.DETAIL_TITLE));
+            ArtistDetailFragment fragment = ArtistDetailFragment
+                    .newInstance(getIntent().getData(), getIntent().getStringExtra(ArtistDetailFragment.DETAIL_TITLE));
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.artist_detail_container, fragment)
                     .commit();
-
-
         }
     }
 
@@ -83,5 +70,23 @@ public class ArtistDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Fragment call this methods
+    @Override
+    public CollapsingToolbarLayout getCollapsingToolbarLayout() {
+        return (CollapsingToolbarLayout)findViewById(R.id.toolbar_layout);
+    }
+
+    // Fragment call this methods
+    @Override
+    public ImageView getArtistDetailPhoto() {
+        return (ImageView) findViewById(R.id.artist_detail_photo);
+    }
+
+    // Fragment call this methods
+    @Override
+    public FloatingActionButton getShareButton() {
+        return (FloatingActionButton) findViewById(R.id.fab);
     }
 }

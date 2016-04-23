@@ -1,23 +1,30 @@
 package com.denis.home.yandexmobilization.ui.artistList;
 
 
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import com.denis.home.yandexmobilization.R;
+import com.denis.home.yandexmobilization.data.ArtistDatabase;
+import com.denis.home.yandexmobilization.service.IntentServiceIdlingResource;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 /**
  * Created by Denis on 23.04.2016.
@@ -30,63 +37,42 @@ public class ArtistListActivityInstrumentationTest {
     public ActivityTestRule<ArtistListActivity> mActivityRule = new ActivityTestRule<>(
             ArtistListActivity.class);
 
-    @Test
-    public void testShowData() {
-/*        onView(withId(R.id.artist_list))
-                .check(matches(hasDescendant(withText("Some text"))));  */
 
+    Activity activity;
+    // Ideling Intent Service
+    private IntentServiceIdlingResource idlingResource;
+
+    @Before
+    public void registerIntentServiceIdlingResource() {
+        Instrumentation instrumentation = getInstrumentation();
+        idlingResource = new IntentServiceIdlingResource(instrumentation.getTargetContext());
+        Espresso.registerIdlingResources(idlingResource);
+    }
+
+    @After
+    public void unregisterIntentServiceIdlingResource() {
+        Espresso.unregisterIdlingResources(idlingResource);
+    }
+
+    // Delete database
+    void deleteTheDatabase() {
+        getInstrumentation().getTargetContext().getDatabasePath(ArtistDatabase.Artists).delete();
+    }
+
+    // Show First screen - assert it
+    @Test
+    public void showArtistListPage() {
         onView(withId(R.id.artist_list))
-                .check(matches(hasDescendant(withText(R.id.list_item_image))));
+                .check(matches(isDisplayed()));
     }
 
-    @Test
-    public void showNoDataMessage() {
-        onView(withText(mActivityRule.getActivity().getString(R.string.empty_artists_list_no_network)));
-    }
-
+    // Show First screen - assert it, click on list item -> go to Second screen - assert it
     @Test
     public void showDetailPage() {
-/*        onView(withId(R.id.artist_list)).perform(
-                scrollTo(hasDescendant(withText(newNoteDescription))));
+        onView(withId(R.id.artist_list))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        onView(nthChildOf(withId(R.id.artist_list), 0)
-                .check(matches(hasDescendant(withText("Some text"))))*/
-
-        onView(withId(R.id.artist_list)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-        onView(withText(R.id.detail_artist_genres));
-    }
-
-    public void testOnCreate() throws Exception {
-
-    }
-
-    public void testOnPause() throws Exception {
-
-    }
-
-    public void testOnResume() throws Exception {
-
-    }
-
-    public void testOnCreateOptionsMenu() throws Exception {
-
-    }
-
-    public void testOnOptionsItemSelected() throws Exception {
-
-    }
-
-    public void testOnCreateLoader() throws Exception {
-
-    }
-
-    public void testOnLoadFinished() throws Exception {
-
-    }
-
-    public void testOnLoaderReset() throws Exception {
-
+        onView(withId(R.id.detail_artist_genres))
+                .check(matches(isDisplayed()));
     }
 }

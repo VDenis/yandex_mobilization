@@ -47,9 +47,9 @@ public class CoverTest {
         assertEquals(testStr, mCover.getBig());
     }
 
-    // Test deserilization
+    // Test deserialization
     @Test
-    public void testDeserilization() throws Exception {
+    public void testDeserialization() throws Exception {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         String coverJsonStr = "{" +
                 "\"small\":\"http://avatars.yandex.net/get-music-content/dfc531f5.p.1080505/300x300\"," +
@@ -62,7 +62,7 @@ public class CoverTest {
 
     // Test serialization
     @Test
-    public void testSerilization() throws Exception {
+    public void testSerialization() throws Exception {
         Gson gson = new Gson();
 
         String small = "http://avatars.yandex.net/get-music-content/dfc531f5.p.1080505/300x300";

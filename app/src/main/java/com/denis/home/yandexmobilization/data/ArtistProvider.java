@@ -34,7 +34,7 @@ public class ArtistProvider {
                 path = Path.Artists,
                 type = "vnd.android.cursor.dir/artist"
         )
-        public static final Uri CONTENT_URI = buildUri(Path.Artists);
+        public static final Uri CONTENT_URI = buildUri(Path.Artists); // Artists dir URI
 
         @InexactContentUri(
                 name = "NOTE_ID",
@@ -44,7 +44,7 @@ public class ArtistProvider {
                 pathSegment = 1
         )
         public static Uri withId(int id) {
-            return buildUri(Path.Artists, Integer.toString(id));
+            return buildUri(Path.Artists, Integer.toString(id)); // Artist item with id URI
         }
     }
 }

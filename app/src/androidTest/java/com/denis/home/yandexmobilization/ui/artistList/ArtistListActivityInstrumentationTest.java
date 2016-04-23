@@ -39,7 +39,7 @@ public class ArtistListActivityInstrumentationTest {
 
 
     Activity activity;
-    // Ideling Intent Service
+    // Idling Intent Service
     private IntentServiceIdlingResource idlingResource;
 
     @Before

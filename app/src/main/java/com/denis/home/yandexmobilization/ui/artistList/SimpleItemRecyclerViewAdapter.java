@@ -64,7 +64,6 @@ public class SimpleItemRecyclerViewAdapter
         // Set content description to the artist image
         String imageDescription = String.format(mArtistListActivity.getResources().getString(R.string.a11n_artist_photo_name), artistName);
         holder.mImageView.setContentDescription(imageDescription);
-        //ViewCompat.setTransitionName(holder.mImageView, "imageTransition" + databaseId);
 
         holder.mArtistNameView.setText(artistName);
         holder.mArtistGenresView.setText(artistGenres);
@@ -75,6 +74,7 @@ public class SimpleItemRecyclerViewAdapter
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // disable transition to detail activity then data refreshing
                 if (!isRefreshing) {
                     Uri artistIdUri = ArtistProvider.Artists.withId(databaseId);
                     if (mTwoPane) {
@@ -88,16 +88,6 @@ public class SimpleItemRecyclerViewAdapter
                         Intent intent = new Intent(context, ArtistDetailActivity.class).setData(artistIdUri);
                         intent.putExtra(ArtistDetailFragment.DETAIL_TITLE, artistName);
 
-/*                        ActivityOptionsCompat options = ActivityOptionsCompat.
-                                makeSceneTransitionAnimation(mArtistListActivity, holder.mImageView, "profile");*/
-
-/*                        ActivityOptionsCompat options =
-                                ActivityOptionsCompat.makeSceneTransitionAnimation(mArtistListActivity
-                                        ,Pair.create((View)holder.mImageView, ViewCompat.getTransitionName(holder.mImageView))
-                                );*/
-                        //ActivityCompat.startActivity(mArtistListActivity, intent, null);
-
-                        //context.startActivity(intent);
 /*                        ActivityOptionsCompat options =
                                 ActivityOptionsCompat.makeSceneTransitionAnimation(mArtistListActivity);
                         ActivityCompat.startActivity(mArtistListActivity, intent, options.toBundle());*/

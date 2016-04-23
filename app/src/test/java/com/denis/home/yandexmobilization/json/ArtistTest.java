@@ -25,9 +25,9 @@ public class ArtistTest {
 
     private final String artistJsonStr = "[{\"id\":1080505,\"name\":\"Tove Lo\",\"genres\":[\"pop\",\"dance\",\"electronics\"],\"tracks\":81,\"albums\":22,\"link\":\"http://www.tove-lo.com/\",\"description\":\"шведская певица и автор песен. Она привлекла к себе внимание в 2013 году с выпуском сингла «Habits», но настоящего успеха добилась с ремиксом хип-хоп продюсера Hippie Sabotage на эту песню, который получил название «Stay High». 4 марта 2014 года вышел её дебютный мини-альбом Truth Serum, а 24 сентября этого же года дебютный студийный альбом Queen of the Clouds. Туве Лу является автором песен таких артистов, как Icona Pop, Girls Aloud и Шер Ллойд.\",\"cover\":{\"small\":\"http://avatars.yandex.net/get-music-content/dfc531f5.p.1080505/300x300\",\"big\":\"http://avatars.yandex.net/get-music-content/dfc531f5.p.1080505/1000x1000\"}}]";
 
-    // Test deserilization
+    // Test deserialization
     @Test
-    public void testDeserilization() throws Exception {
+    public void testDeserialization() throws Exception {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Artist[] result = gson.fromJson(artistJsonStr, Artist[].class);
         assertEquals("Tove Lo", result[0].getName());
@@ -37,7 +37,7 @@ public class ArtistTest {
 
     // Test serialization
     @Test
-    public void testSerilization() throws Exception {
+    public void testSerialization() throws Exception {
         Gson gson = new Gson();
         Artist[] artists = new Artist[1];
         artists[0] = new Artist(
@@ -54,8 +54,6 @@ public class ArtistTest {
         );
         String result = gson.toJson(artists);
         Artist[] resultArray = gson.fromJson(result, Artist[].class);
-        //assertEquals(artists[0], resultArray[0]);
         assertTrue(artists[0].getDescription().equals(resultArray[0].getDescription()));
-        //assertEquals(artistJsonStr,result);
     }
 }

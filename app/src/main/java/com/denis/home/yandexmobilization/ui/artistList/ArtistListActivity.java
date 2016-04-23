@@ -58,15 +58,6 @@ public class ArtistListActivity extends AppCompatActivity implements LoaderManag
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-/*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
         mRecyclerView = (RecyclerView ) findViewById(R.id.artist_list);
         assert mRecyclerView != null;
         setupRecyclerView(mRecyclerView);
@@ -100,13 +91,6 @@ public class ArtistListActivity extends AppCompatActivity implements LoaderManag
         // Launch Loader
         getSupportLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
     }
-
-/*    @Override
-    protected void onStart() {
-        super.onStart();
-
-        startSync();
-    }*/
 
     private void startSync() {
         // start background synchronization service

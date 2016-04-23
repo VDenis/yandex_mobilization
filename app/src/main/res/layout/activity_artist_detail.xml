@@ -27,9 +27,9 @@
                 android:id="@+id/artist_detail_photo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/a11n_artist_photo"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:contentDescription="@string/a11n_artist_photo"
                 app:layout_collapseMode="parallax"
                 tools:src="@mipmap/ic_launcher"/>
 
@@ -48,21 +48,21 @@
         android:id="@+id/artist_detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="@dimen/artist_detail_content_margin"
+        android:layout_marginLeft="@dimen/artist_detail_content_margin"
+        android:layout_marginRight="@dimen/artist_detail_content_margin"
+        android:layout_marginStart="@dimen/artist_detail_content_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <!--app:layout_anchor="@+id/artist_detail_container"
-    app:layout_anchorGravity="top|end"-->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start"
         android:layout_margin="@dimen/fab_margin"
+        android:contentDescription="@string/a11n_share_button"
         android:src="@android:drawable/ic_menu_share"
         app:layout_anchor="@+id/app_bar"
-        android:contentDescription="@string/a11n_share_button"
         app:layout_anchorGravity="bottom|end"/>
 
 </android.support.design.widget.CoordinatorLayout>

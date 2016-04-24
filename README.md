@@ -1,6 +1,9 @@
 # Школа мобильной разработки, тестовое приложение
 
 ## Yandex Mobilization 2016
+https://yandex.ru/mobilization/
+
+https://academy.yandex.ru/events/mobdev/msk-2016/
 
 ### Required Tasks
 Напишите приложение для платформы Android на языке Java. Чтобы вам было легче, мы подготовили примерный вид экранов тестового приложения и набор данных. 

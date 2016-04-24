@@ -2,9 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt' // Generate content provider
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'yandex_mobilization'
+            keyPassword 'password'
+            storeFile file("$rootDir/keystore.jks")
+            storePassword 'password'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "24.0.0 rc3"
-
     defaultConfig {
         applicationId "com.denis.home.yandexmobilization"
         minSdkVersion 15
@@ -16,11 +23,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
-
     productFlavors {
-        devel  {
+        devel {
             applicationId "com.denis.home.yandexmobilization.devel"
             buildConfigField 'String', 'SERVER_PATH', '"https://dl.dropboxusercontent.com/u/55518874/YandexMobilizationJson_200416/artists.json"'
         }
@@ -29,7 +36,6 @@ android {
             buildConfigField 'String', 'SERVER_PATH', '"http://cache-default01h.cdn.yandex.net/download.cdn.yandex.net/mobilization-2016/artists.json"'
         }
     }
-
     sourceSets {
         defaultConfig {
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
@@ -38,34 +44,37 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.android.support:recyclerview-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
-
-    apt 'net.simonvt.schematic:schematic-compiler:0.6.3' // Generate content provider
-    compile 'net.simonvt.schematic:schematic:0.6.3' // Generate content provider
-
-    compile 'com.google.code.gson:gson:2.6.2' // use for convert a JSON string to an equivalent Java object
-
-    compile 'com.facebook.stetho:stetho:1.3.1' // use for database debug
-
-    compile 'com.yqritc:recyclerview-flexibledivider:1.2.9' // Android library providing simple way to control divider items of RecyclerView
-
-    compile 'com.squareup.picasso:picasso:2.5.2' // download images
-
-    androidTestCompile 'com.android.support.test:runner:0.5' // instrumental testing
-    androidTestCompile 'com.android.support.test:rules:0.5' // instrumental testing
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2' // instrumental testing
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2' // For CountingIdlingResource // testing Recycler view
+    apt 'net.simonvt.schematic:schematic-compiler:0.6.3'
+    // Generate content provider
+    compile 'net.simonvt.schematic:schematic:0.6.3'
+    // Generate content provider
+    compile 'com.google.code.gson:gson:2.6.2'
+    // use for convert a JSON string to an equivalent Java object
+    compile 'com.facebook.stetho:stetho:1.3.1'
+    // use for database debug
+    compile 'com.yqritc:recyclerview-flexibledivider:1.2.9'
+    // Android library providing simple way to control divider items of RecyclerView
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    // download images
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    // instrumental testing
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    // instrumental testing
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    // instrumental testing
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
+    // For CountingIdlingResource // testing Recycler view
     androidTestCompile 'com.android.support:support-annotations:23.3.0'
     androidTestCompile 'com.android.support:support-v4:23.3.0'
     androidTestCompile 'com.android.support:appcompat-v7:23.3.0'
     androidTestCompile 'com.android.support:design:23.3.0'
     androidTestCompile 'com.android.support:recyclerview-v7:23.3.0'
-
-    androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2' // IdlingResource is used in the app under test
-
+    androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
+    // IdlingResource is used in the app under test
 }
